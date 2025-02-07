@@ -1,18 +1,23 @@
-import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Favourites from './pages/Favourites'
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Favourites from "./pages/Favourites";
+import Navbar from "./components/Navbar";
+import "./css/App.css";
 
 function App() {
-  
   return (
-   <main>
-    <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/favourites" element={<Favourites/>}/>
-      {/* 53:19 */}
-    </Routes>
-   </main>
-  )
+    <>
+      <div>
+        <Navbar/>
+      </div>
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favourites" element={<Favourites />} />
+        </Routes>
+      </main>
+    </>
+  );
 }
 
-export default App
+export default App;
