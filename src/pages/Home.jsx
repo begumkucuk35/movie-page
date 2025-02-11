@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import "../css/Home.css";
-import { getPopularMovies } from "../services/api";
+import { getPopularMovies, searchMovies } from "../services/api";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -24,10 +24,25 @@ const Home = () => {
     loadPopularMovies();
   }, []);
 
-  function handleSearch(e) {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    alert(search);
-  }
+    if (!search.trim()) return; //To prevent searching for spaces
+    if (loading) return; //To prevent searching when already searching for something else
+
+    setLoading(true);
+    try {
+      const searchedMovies = await searchMovies(search);
+      setMovies(searchedMovies);
+      setError(null)
+    } catch (err) {
+      console.log(err);
+      setError("Failed to searh movies...");
+    } finally {
+      setLoading(false);
+    }
+  };
+  //1:20:00
+  //Problem is that it starts searching before submitting the form 
   return (
     <div className="home">
       <form className="search-form" onSubmit={handleSearch}>
@@ -38,22 +53,27 @@ const Home = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="search-button" type="submit">
+        <button className="search-button" type="submit" >
           Search
         </button>
       </form>
 
-      {/* 1:15:40 */}
-      <div className="movies-grid">
-        {movies.map(
-          (movie) =>
-            movie.title
-              .toLocaleLowerCase()
-              .startsWith(search.toLowerCase()) && (
-              <MovieCard movie={movie} key={movie.id} />
-            )
-        )}
-      </div>
+      {error && <div className="error-message">{error} </div>}
+
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        <div className="movies-grid">
+          {movies.map(
+            (movie) =>
+              movie.title
+                .toLocaleLowerCase()
+                .startsWith(search.toLowerCase()) && (
+                <MovieCard movie={movie} key={movie.id} />
+              )
+          )}
+        </div>
+      )}
     </div>
   );
 };
