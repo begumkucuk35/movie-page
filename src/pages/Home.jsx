@@ -41,7 +41,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-  //1:20:00
   return (
     <div className="home">
       <form className="search-form" onSubmit={handleSearch}>
