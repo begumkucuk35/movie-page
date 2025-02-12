@@ -42,7 +42,6 @@ const Home = () => {
     }
   };
   //1:20:00
-  //Problem is that it starts searching before submitting the form 
   return (
     <div className="home">
       <form className="search-form" onSubmit={handleSearch}>
@@ -65,10 +64,7 @@ const Home = () => {
       ) : (
         <div className="movies-grid">
           {movies.map(
-            (movie) =>
-              movie.title
-                .toLocaleLowerCase()
-                .startsWith(search.toLowerCase()) && (
+            (movie) =>(
                 <MovieCard movie={movie} key={movie.id} />
               )
           )}
